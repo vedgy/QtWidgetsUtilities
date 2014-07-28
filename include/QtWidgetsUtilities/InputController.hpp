@@ -69,8 +69,7 @@ public:
                              QFileDialog::AcceptMode acceptMode,
                              QFileDialog::FileMode fileMode) {
         assert(fileMode != QFileDialog::ExistingFiles);
-        const QStringList names = getFileOrDirNames(
-                                      title, acceptMode, fileMode);
+        QStringList names = getFileOrDirNames(title, acceptMode, fileMode);
         assert(names.size() <= 1 &&
                "More than one name must never appear here!");
         return names.empty() ? QString() : names.back();
