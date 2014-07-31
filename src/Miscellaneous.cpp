@@ -20,6 +20,8 @@
 
 # include <QString>
 # include <QFont>
+# include <QHBoxLayout>
+# include <QFormLayout>
 # include <QWidget>
 # include <QLabel>
 # include <QScrollArea>
@@ -76,6 +78,18 @@ void addScrollableTab(QTabWidget * const parent,
     scrollArea->setWidget(widget);
     scrollArea->setWidgetResizable(true);
     parent->addTab(scrollArea, name);
+}
+
+
+void addSubWidget(QFormLayout * const layout, const QString & labelText,
+                  QWidget * const field)
+{
+    assert(layout != nullptr);
+    assert(field != nullptr);
+    QHBoxLayout * const rowLayout = new QHBoxLayout;
+    rowLayout->addSpacing(subWidgetIndent());
+    rowLayout->addWidget(field);
+    layout->addRow("       " + labelText, rowLayout);
 }
 
 }

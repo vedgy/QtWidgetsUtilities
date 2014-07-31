@@ -25,6 +25,7 @@
 # include <QFileDialog>
 
 # include <cassert>
+# include <utility>
 
 
 namespace QtUtilities
@@ -72,7 +73,7 @@ public:
         QStringList names = getFileOrDirNames(title, acceptMode, fileMode);
         assert(names.size() <= 1 &&
                "More than one name must never appear here!");
-        return names.empty() ? QString() : names.back();
+        return names.empty() ? QString() : std::move(names.back());
     }
 
     /// @brief Asks user for one or more files to be opened for reading.

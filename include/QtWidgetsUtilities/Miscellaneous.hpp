@@ -20,10 +20,16 @@
 # define QT_WIDGETS_UTILITIES_MISCELLANEOUS_HPP
 
 # include <QtGlobal>
+# include <QSizePolicy>
+# include <QSpacerItem>
+# include <QLayout>
+# include <QWidget>
+
+# include <cassert>
 
 
 QT_FORWARD_DECLARE_CLASS(QString)
-QT_FORWARD_DECLARE_CLASS(QWidget)
+QT_FORWARD_DECLARE_CLASS(QFormLayout)
 QT_FORWARD_DECLARE_CLASS(QLabel)
 QT_FORWARD_DECLARE_CLASS(QTabWidget)
 
@@ -38,6 +44,18 @@ void showWindow(QWidget * window);
 /// @brief Calls showWindow(window) and activates window (gives focus).
 void showAndActivateWindow(QWidget * window);
 
+inline void setFixedSizePolicy(QWidget * widget)
+{
+    assert(widget != nullptr);
+    widget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+}
+
+inline void addSpacing(QLayout * layout, int width = 1, int height = 10)
+{
+    assert(layout != nullptr);
+    layout->addItem(new QSpacerItem(width, height));
+}
+
 /// @return Label with given text and parent that can be used as a caption.
 /// @param boldText If true, label's text is bold.
 /// @param fontPointSizeIncrement pt-size to be added to default QLabel font
@@ -49,6 +67,12 @@ QLabel * getCaption(const QString & text, QWidget * parent = nullptr,
 /// NOTE: widget and tab must be valid pointers.
 void addScrollableTab(QTabWidget * widget,
                       QWidget * tab, const QString & tabLabel);
+
+constexpr int subWidgetIndent() noexcept { return 30; }
+/// @brief Adds (labelText, field) row indented by subWidgetIndent() to layout.
+/// NOTE: layout and field must be valid pointers.
+void addSubWidget(QFormLayout * layout, const QString & labelText,
+                  QWidget * field);
 
 }
 
