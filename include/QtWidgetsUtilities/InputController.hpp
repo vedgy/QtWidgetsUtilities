@@ -19,13 +19,12 @@
 # ifndef QT_WIDGETS_UTILITIES_INPUT_CONTROLLER_HPP
 # define QT_WIDGETS_UTILITIES_INPUT_CONTROLLER_HPP
 
+# include <CommonUtilities/CopyAndMoveSemantics.hpp>
+
 # include <QString>
 # include <QStringList>
 # include <QMessageBox>
 # include <QFileDialog>
-
-# include <cassert>
-# include <utility>
 
 
 namespace QtUtilities
@@ -39,6 +38,9 @@ namespace Widgets
 class InputController
 {
 public:
+    NEITHER_COPYABLE_NOR_MOVABLE(InputController)
+    virtual ~InputController() noexcept;
+
     /// @brief Blocks/unblocks some non-GUI user input.
     /// @param block If true, input will be blocked; if false - unblocked.
     /// WARNING: recursive blocking and redundant unblocking are forbidden.
@@ -56,10 +58,7 @@ public:
         const QString & title, const QString & text,
         QMessageBox::StandardButtons buttons = QMessageBox::Ok,
         QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-        QMessageBox::Icon icon = QMessageBox::Critical) {
-        return showMessageImplementation(
-                   title, text, buttons, defaultButton, icon);
-    }
+        QMessageBox::Icon icon = QMessageBox::Critical);
 
     /// @brief Asks user for file or directory.
     /// @param title Title of the file dialog.
@@ -68,26 +67,16 @@ public:
     /// WARNING: never pass fileMode equal to QFileDialog::ExistingFiles.
     QString getFileOrDirName(const QString & title,
                              QFileDialog::AcceptMode acceptMode,
-                             QFileDialog::FileMode fileMode) {
-        assert(fileMode != QFileDialog::ExistingFiles);
-        QStringList names = getFileOrDirNames(title, acceptMode, fileMode);
-        assert(names.size() <= 1 &&
-               "More than one name must never appear here!");
-        return names.empty() ? QString() : std::move(names.back());
-    }
+                             QFileDialog::FileMode fileMode);
 
     /// @brief Asks user for one or more files to be opened for reading.
     /// @param title Title of the file dialog.
     /// @return List of files selected by user. If no item was
     /// selected, that is, operation was cancelled, empty list.
-    QStringList getOpenFileNames(const QString & title) {
-        return getFileOrDirNames(title, QFileDialog::AcceptOpen,
-                                 QFileDialog::ExistingFiles);
-    }
+    QStringList getOpenFileNames(const QString & title);
 
 protected:
     InputController() = default;
-    ~InputController() = default;
 
     virtual int showMessageImplementation(
         const QString & title, const QString & text,
@@ -97,9 +86,6 @@ protected:
     virtual QStringList getFileOrDirNames(const QString & title,
                                           QFileDialog::AcceptMode acceptMode,
                                           QFileDialog::FileMode fileMode) = 0;
-
-private:
-    Q_DISABLE_COPY(InputController)
 };
 
 }

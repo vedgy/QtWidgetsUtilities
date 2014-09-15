@@ -40,6 +40,7 @@ include(vedgTools/LibraryGetQtCoreUtilitiesPublicHeaders)
 set(Sources_Path src)
 
 include_directories(
+    ${PATH_TO_CMAKE_MODULES}/include
     ${QtCoreUtilities_PublicHeaders_Path}
     ${${Target_Name}_PublicHeaders_Path}
     ${${Target_Name}_PublicHeaders_Path}/${Target_Name}
@@ -47,6 +48,7 @@ include_directories(
 
 set(Sources
     ${Sources_Path}/Miscellaneous.cpp ${Sources_Path}/TooltipShower.cpp
+    ${Sources_Path}/InputController.cpp
     ${Sources_Path}/WindowInputController.cpp ${Sources_Path}/HandleErrors.cpp
 )
 
